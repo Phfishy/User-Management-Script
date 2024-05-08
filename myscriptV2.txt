@@ -1,0 +1,104 @@
+#! /bin/bash
+
+function main()
+{
+	# opening comments - Displays Information about the assignment, student, and then clears the screen.
+
+	clear
+	echo Lab 8 - myScript User Management
+	echo Zachary Bernard 0410737389
+	echo CST8102 Section 311
+	echo myscript.sh
+	echo 2023-11-28
+	echo -e "A script file for the purpose of user and group management\n"
+	read -p "Press [enter] to continue..."
+	clear
+
+	# menu display - declares a string that turns off a loop if it changes value. While looping displays a menu and performs operations according to user input.
+
+	looping=y
+
+	while [[ $looping = "y" ]]
+	do
+		echo Choose one of the following options: 
+		echo A Create a user account
+		echo B Delete a user account
+		echo C Change a supplementary group for a user account
+		echo D Change initial group for a user account
+		echo E Change default login shell for a user account
+		echo F Change account expiration date for a user account
+		echo Q Quit 
+		read -p "What would you like to do?:" choice
+		clear
+
+		case $choice in
+			a|A) a ;;
+			b|B) b ;;
+			c|C) c ;;
+			d|D) d ;;
+			e|E) e ;;
+			f|F) f ;;
+			q|Q)
+			       	looping=f
+				sleep 3;;
+			*) echo  Invalid input. Choose one of the options.;;
+		esac
+	done
+}
+# Prompt for name, home, and shell for a new user, then create the user
+function a()
+{
+	read -p "Enter the name of the account:" name
+	read -p "Enter the user's home directory(use absolute path format):" home
+	read -p	"Enter the user's default login shell(use absolute path format):" shell
+	useradd -d $home -s $shell $name
+	sleep 3
+	clear
+}
+# prompt for a users name, then delete that user
+function b()
+{
+	read -p "Enter the name of the user you wish to delete:" name
+	userdel $name
+	sleep 3
+	clear
+}
+# prompt for a users name, and the name of a group, then add that user to the group
+function c()
+{
+	read -p "Enter the name of the user you wish to add to a supplementary group:" name
+	read -p "Enter the name of the group you wish to add the user to:" group
+	usermod -aG $group $name
+	sleep 3  
+	clear	
+}
+# prompt for a users name, and the name of a group, then change that users initial group to the one given
+function d()
+{
+	read -p "Enter the name of the user you wish to change the initial group of:" name
+	read -p "Enter the name of the group you wish to set as the initial group for the user:" group
+	usermod -g $group $name
+	sleep 3
+	clear
+}
+# prompt for a users name, and the name of a shell, then change that users shell to the one given
+function e()
+{
+	read -p "Enter the name of the user you wish to change the shell of:" name
+	read -p "Enter the name of the shell you wish to switch the user to:" shell
+	usermod -s $shell $name
+	sleep 3
+	clear
+}
+# prompt for a users name, and an expiration date, then change that users expiration date to the one given
+function f()
+{
+	read -p "Enter the name of the user you wish to change the expiration date of:" name
+	read -p "Enter the expiration date you wish to have apply to the user:" date
+	usermod -e $date $name
+	sleep 3
+	clear
+}
+
+# saw on unix stack exchange.(https://unix.stackexchange.com/questions/449498/call-function-declared-below) - more organized to work in an object oriented manner. "$@" makes sure to pass all command line arguments 
+main "$@"
